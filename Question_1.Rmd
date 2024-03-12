@@ -75,12 +75,17 @@ summary(model_3)
 -   Height is matters across all models
 -   Sex, Exer, and Age does not matter in any of the models
 
-Based on these criteria, adjusted r-squared has the highest value in
-Model 1 which it provides the best fir per predictor used. Model 1 has
-the lowest RSE which the residuals are smallest on avg for this model.
+Based on these criteria, Model 1 has highest Adjusted R-squared of 0.4343, we
+can say that we have approximately 43.4 percent of variability in _Wr.Hnd_ is
+explained by our three varibles in the regression model. Since we only get
+slightly difference from adding new independent variables _Exer_ and _Age_ 
+in other two models, we could use Model 1 which has less variables to fulfill 
+the similar result as the best fit per predictor used. 
+The lowest RSE which the residuals are smallest on avg for this model.
 The additional variables introduced in Models 2 and 3 (Exer and Age) do
 not provide major statistical significance, as indicated by their high
-p-values. Therefore, Model 1 which include Height and Sex as predictors,
+p-values. 
+Therefore, Model 1 which include Height and Sex as predictors,
 appears to be the best model based on the output. It has the greatest
 adjusted R-squared value and the lowest RSE, indicating an excellent
 balance of model fit and complexity. Models 2 and 3 introduce new
@@ -111,15 +116,17 @@ $$
 
 -   Coefficient for Female(-1.816): On avg, the female is 1.816cm
     shorter span of writing hand comparing to the male, height constant.
-    But this predictor is not statistically significant at th 10% level
+    But this predictor is not statistically significant at the 10% level
     (p-value of 0.208). Showing that it's not sufficient evidence to
     conclude that the difference in hand span between sex is different
     from zero after controlling for height.
 
 -   Significant Predictors: When it's at 10% level of significance, only
     the height variable is a significant predictor since the p-value is
-    way below 0.1. The variables of sex are not significant at this
+    way below 0.1, while other variables are all above 0.05. 
+    The variables of sex are not significant at this
     level.
+
 
 #### iii) Residual Analysis
 
@@ -130,9 +137,14 @@ residuals <- resid(model_1)
 
 ggplot() + 
   geom_hline(yintercept = 0, linetype = "dashed", color = "blue") +
-  geom_point(aes(x = fitted_values, y = residuals), color = "orange") +
+  geom_point(aes(x = fit_values, y = residuals), color = "orange") +
   labs(x = "Fitted values", y = "Residuals") +
   theme_minimal() +
   theme(axis.title = element_text(color = "black", size = 12, face = "bold"))
 
 ```
+Looking at our plot between residuals and fitted values, with the existence of 
+two clusters of points are constantly spread, we consider there might be 
+potential limitations of considering all the variations among this model.
+By also having the horizontal residual line lie on 0, it indicates that our 
+predictions and our model is not under/over estimated.
