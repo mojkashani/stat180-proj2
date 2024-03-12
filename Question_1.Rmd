@@ -157,4 +157,11 @@ into distinct clusters, with mean of points of each cluster, same clusters
 having higher percentage of similarity, the different clusters have less.
 
 ### b) List three advantages and three disadvantages of K-means clustering?
+- Advantages: 
+simple and efficient to handle big datasets.
+- Disadvantages: 
+Have to know how to scale outliers since outliers are sensitive
+here. 
+You have to have knowledge about choosing number of clusters in advance.
+
 ### c) Using any dataset of your choice, demonstrate K-means clustering with an example.
