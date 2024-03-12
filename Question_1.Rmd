@@ -148,3 +148,12 @@ two clusters of points are constantly spread, we consider there might be
 potential limitations of considering all the variations among this model.
 By also having the horizontal residual line lie on 0, it indicates that our 
 predictions and our model is not under/over estimated.
+
+## Question 2:
+### a) What is K-means clustering?
+This is the unsupervised machine learning algorithm where it divides objects
+into distinct clusters, with mean of points of each cluster, same clusters 
+having higher percentage of similarity, the different clusters have less.
+
+### b) List three advantages and three disadvantages of K-means clustering?
+### c) Using any dataset of your choice, demonstrate K-means clustering with an example.
