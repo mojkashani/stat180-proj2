@@ -1,0 +1,16 @@
+---
+title: "proj"
+author: "Mojdeh Motalebi Kashani"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(hrbrthemes)
+library(geomtextpath)
+library(caret)
+```
