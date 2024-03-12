@@ -138,7 +138,8 @@ residuals <- resid(model_1)
 ggplot() + 
   geom_hline(yintercept = 0, linetype = "dashed", color = "blue") +
   geom_point(aes(x = fit_values, y = residuals), color = "orange") +
-  labs(x = "Fitted values", y = "Residuals") +
+  labs(x = "Fitted values", y = "Residuals",
+       title = "Residuals VS Fitted") +
   theme_minimal() +
   theme(axis.title = element_text(color = "black", size = 12, face = "bold"))
 
