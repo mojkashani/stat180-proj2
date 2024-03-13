@@ -14,3 +14,88 @@ library(hrbrthemes)
 library(geomtextpath)
 library(caret)
 ```
+
+## Q3
+First, we import the csv file and select **CLIMATE**, **CLASSSIZE**, **RESOURCES**, and **AUTONOMY** as independent variables to predict **COMMIT**.
+```{r}
+# Reading the csv data and filtering the relevant variables
+data <- read.csv("Handout 1.csv")
+handout <- data %>% select(COMMIT, CLIMATE, CLASSSIZE, RESOURCES, AUTONOMY)
+```
+
+Now we create a 80%-20% train-test data partition.
+```{r}
+# Creating the train/test data partition
+idx <- handout$COMMIT %>%
+  createDataPartition(p = 0.8, list = F)
+
+train <- handout[idx, ]
+test <- handout[-idx, ]
+```
+
+**a)** For this section, we create a linear regression model with 5-fold cross validation based on the train data.
+```{r}
+# Create 5-fold cross validation ctrl with 3 times repetition
+ctrl1 <- trainControl(method = "repeatedcv", number = 5)
+
+# Creating the linear model
+m1 <- train(COMMIT ~ ., data = train, method = "lm", trControl = ctrl1)
+summary(m1)
+```
+
+The $R^2$, RMSE, and MAE of the model itself can be seen below.
+```{r}
+# Outputting model's R^2, RMSE, and MAE
+print(m1)
+```
+
+Now, we calculate the predictions based on the test data and calculate the $R^2$, RMSE, and MAE based on these predictions.
+```{r}
+# Creating predictions based on the derived model and test data
+pred1 <- m1 %>% predict(test)
+
+# Computing R^2, RMSE, and MAE based on test data
+data.frame(R2 = R2(pred1, test$COMMIT),
+            RMSE = RMSE(pred1, test$COMMIT),
+            MAE = MAE(pred1, test$COMMIT))
+```
+
+**b)** For this section, first, we create a categorical version of the target variable based on its median.
+```{r}
+# Create categorical outcome variable based on COMMIT median
+train$COMMIT_cat[train$COMMIT < median(handout$COMMIT)] <- 0
+train$COMMIT_cat[train$COMMIT >= median(handout$COMMIT)] <- 1
+
+test$COMMIT_cat[test$COMMIT < median(handout$COMMIT)] <- 0
+test$COMMIT_cat[test$COMMIT >= median(handout$COMMIT)] <- 1
+
+# Convert outcome variable to factor for each data frame
+train$COMMIT_cat <- as.factor(train$COMMIT_cat)
+test$COMMIT_cat <- as.factor(test$COMMIT_cat)
+```
+
+Now, we create a linear logistic regression model with 5-fold cross validation based on the train data.
+```{r}
+ctrl2 <- trainControl(method="cv", number=5,
+                      savePredictions="all", classProbs=TRUE)
+
+# Creating the linear model
+m2 <- train(COMMIT_cat ~ CLIMATE + CLASSSIZE + RESOURCES + AUTONOMY,
+          data = train, method = "glm", family = "binomial")
+summary(m2)
+```
+
+The accuracy of the model itself can be seen below.
+```{r}
+# Outputting model's accuracy
+print(m2)
+```
+
+Now, we calculate the predictions based on the test data and generate the confusion matrix to analyze its accuracy.
+```{r}
+# Creating predictions based on the model and test data
+pred2 <- predict(m2, newdata = test)
+
+# Create confusion matrix to assess model fit/performance on test data
+confusionMatrix(data = pred2, test$COMMIT_cat)
+```
