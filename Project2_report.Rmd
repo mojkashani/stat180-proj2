@@ -1,0 +1,312 @@
+---
+title: "Project 1"
+output: pdf_document
+date: "2024-03-14"
+---
+Group Member: Sophia Zhang, Lulu Chen, Mojdeh Motalebi Kashani, Samara Gordon\
+
+Contribute: Sophia (25%), Lulu (25%), Mojdeh(25%), Samara(25%)
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(hrbrthemes)
+library(geomtextpath)
+library(caret)
+```
+
+```{r}
+# Read the data
+survey <- read.csv("/Users/sophiazhang/Desktop/stat project2/survey.csv")
+```
+
+## Question 1:
+
+Based on the project 1, one of the outcome variables is the 
+span of hand "Wr.Hnd".
+
+#### Research Question:
+
+How does height, sex, and some other factors like as exercise frequency
+"Exer" and age affects the span of the writing hand "Wr. Hnd" among
+students?
+
+### Question 1 (a)
+
+#### Fit Model
+
+1.  Model 1: Wr.Hnd \~ Height + Sex
+
+2.  Model 2: Wr.Hnd \~ Height + Sex + Exer Add exercise frequency as an
+    ordinal variable
+
+3.  Model 3: Wr.Hnd \~ Height + Sex + Exer + Age Including age to
+    account for overall body size and growth
+
+```{r}
+# Model 1: Model w/ height and sex
+model_1 <- lm(Wr.Hnd ~ Height + Sex, data = survey)
+summary(model_1)
+```
+
+```{r}
+# Model 2: Add the exercise frequency
+model_2 <- lm(Wr.Hnd ~ Height + Sex + Exer, data = survey)
+summary(model_2)
+```
+
+```{r}
+# Model 3: Add age
+model_3 <- lm(Wr.Hnd ~ Height + Sex + Exer + Age, data = survey)
+summary(model_3)
+```
+
+#### Criteria for best competing model
+
+1.  Adjusted R-squared
+2.  Residual Standard Error
+3.  P-values
+
+#### Determine the best model
+
+1.  Adjusted R-squared Model 1: 0.4343 Model 2: 0.4316 Model 3: 0.4305
+
+2.  Residual Standard Error Model 1: 1.432 Model 2: 1.435 Model 3: 1.436
+
+3.  P-values
+
+-   Height is matters across all models
+-   Sex, Exer, and Age does not matter in any of the models
+
+Based on these criteria, Model 1 has highest Adjusted R-squared of 0.4343, we
+can say that we have approximately 43.4 percent of variability in _Wr.Hnd_ is
+explained by our three varibles in the regression model. Since we only get
+slightly difference from adding new independent variables _Exer_ and _Age_ 
+in other two models, we could use Model 1 which has less variables to fulfill 
+the similar result as the best fit per predictor used. 
+The lowest RSE which the residuals are smallest on avg for this model.
+The additional variables introduced in Models 2 and 3 (Exer and Age) do
+not provide major statistical significance, as indicated by their high
+p-values. 
+Therefore, Model 1 which include Height and Sex as predictors,
+appears to be the best model based on the output. It has the greatest
+adjusted R-squared value and the lowest RSE, indicating an excellent
+balance of model fit and complexity. Models 2 and 3 introduce new
+variables that do not greatly increase the model's effectiveness and
+instead add extra complexity.
+
+### Question 1 (b): Use the results from your best model in part (a) to answer the question below
+
+#### i) Regression equation
+
+$$
+\text{Wr.Hnd} = 8.28553 + 0.06694 \times \text{Height} - 1.81657 \times \text{SexFemale} - 0.37084 \times \text{SexMale}
+$$
+
+#### ii) Interpret of the Intercept and Slopes
+
+-   Intercept(8.285): This show the estimated span of the writing hand
+    for individual like male in giving a context with a height of 0cm
+    which is not really a meaningful or real interpretation. The
+    intercept often will not have a practical interpretation, especially
+    when the 0 point of the predictors is not within a meaningful range
+    of the data.
+
+-   Slope for Height(0.066): Every 1cm increase in height, the writing
+    hand is expected to increase about 0.066cm when other variables
+    constant. This will affect significant when the p-value is way less
+    then 0.05.
+
+-   Coefficient for Female(-1.816): On avg, the female is 1.816cm
+    shorter span of writing hand comparing to the male, height constant.
+    But this predictor is not statistically significant at the 10% level
+    (p-value of 0.208). Showing that it's not sufficient evidence to
+    conclude that the difference in hand span between sex is different
+    from zero after controlling for height.
+
+-   Significant Predictors: When it's at 10% level of significance, only
+    the height variable is a significant predictor since the p-value is
+    way below 0.1, while other variables are all above 0.05. 
+    The variables of sex are not significant at this
+    level.
+
+
+#### iii) Residual Analysis
+
+Looking at our plot between residuals and fitted values, with the existence of 
+two clusters of points are constantly spread, we consider there might be 
+potential limitations of considering all the variations among this model.
+By also having the horizontal residual line lie on 0, it indicates that our 
+predictions and our model is not under/over estimated.
+
+```{r, fig.align='center'}
+# Residuals vs Fitted
+fit_values <- fitted(model_1)
+residuals <- resid(model_1)
+
+ggplot() + 
+  geom_hline(yintercept = 0, linetype = "dashed", color = "blue") +
+  geom_point(aes(x = fit_values, y = residuals), color = "orange") +
+  labs(x = "Fitted values", y = "Residuals",
+       title = "Residuals VS Fitted") +
+  theme_minimal() +
+  theme(axis.title = element_text(color = "black", size = 12, face = "bold"))
+```
+
+## Question 2: 
+
+### a) What is K-means clustering?
+
+This is the unsupervised machine learning algorithm where it divides objects
+into distinct clusters, with mean of points of each cluster, same clusters 
+having higher percentage of similarity, the different clusters have less.
+
+### b) List three advantages and three disadvantages of K-means clustering?
+
+- Advantages: 
+simple and efficient to handle big datasets.
+- Disadvantages: 
+Have to know how to scale outliers since outliers are sensitive
+here. 
+You have to have knowledge about choosing number of clusters in advance.
+
+### c) Using any dataset of your choice, demonstrate K-means clustering with an example.
+
+
+## Question 3:
+
+First, we import the csv file and select **CLIMATE**, **CLASSSIZE**, 
+**RESOURCES**, and **AUTONOMY** as independent variables to predict **COMMIT**.
+
+```{r}
+# Reading the csv data and filtering the relevant variables
+data <- read.csv("stat project2/Handout 1.csv")
+handout <- data %>% select(COMMIT, CLIMATE, CLASSSIZE, RESOURCES, AUTONOMY)
+```
+
+Then, we create a categorical version of the target variable based on its median.
+```{r}
+# Create categorical outcome variable based on COMMIT median
+handout$COMMIT_cat[handout$COMMIT < median(handout$COMMIT)] <- 0
+handout$COMMIT_cat[handout$COMMIT >= median(handout$COMMIT)] <- 1
+
+# Convert outcome variable to factor format
+handout$COMMIT_cat <- as.factor(handout$COMMIT_cat)
+```
+
+### Question 3 (a)
+
+Now, we create 2 linear regression models. One with partitioning the 
+dataset into train/test groups, and one with 5-fold cross validation.
+
+**Train/Test Partitioning:** For the first model, we create a 80%-20% train-test
+data partition. We have also tried creating other models with 70%-30% and 
+60%-40% ratios and the results are pretty similar.
+
+```{r}
+# Creating the train/test data partition
+idx <- handout$COMMIT %>%
+  createDataPartition(p = 0.8, list = F)
+
+train <- handout[idx, ]
+test <- handout[-idx, ]
+
+# Creating the train/test model
+m1 <- train(COMMIT ~ CLIMATE + CLASSSIZE + RESOURCES + AUTONOMY,
+          data = train, method = "lm")
+summary(m1)
+```
+
+The $R^2$, RMSE, and MAE of the train/test model itself can be seen below.
+```{r}
+# Outputting model's R^2, RMSE, and MAE
+print(m1)
+```
+
+Now, we calculate the predictions based on the test data and calculate 
+the $R^2$, RMSE, and MAE based on these predictions.
+```{r}
+# Creating predictions based on the derived model and test data
+pred1 <- m1 %>% predict(test)
+
+# Computing R^2, RMSE, and MAE based on test data
+data.frame(R2 = R2(pred1, test$COMMIT),
+            RMSE = RMSE(pred1, test$COMMIT),
+            MAE = MAE(pred1, test$COMMIT))
+```
+
+
+**5-fold Verification:** Now we create the second model based on the 5-fold 
+verification method.
+```{r}
+# Create 5-fold cross validation ctrl
+ctrl <- trainControl(method="cv", number=5)
+
+# Creating the 5-fold model
+m2 <- train(COMMIT ~ CLIMATE + CLASSSIZE + RESOURCES + AUTONOMY,
+          data = handout, trControl = ctrl, method = "lm")
+summary(m2)
+```
+
+The $R^2$, RMSE, and MAE of the 5-fold model itself can be seen below.
+```{r}
+# Outputting model's R^2, RMSE, and MAE
+print(m2)
+```
+
+Now, if we test this 5-fold model on the test data used for the first model, 
+we can calculate the $R^2$, RMSE, and MAE based on these predictions.
+```{r}
+# Creating predictions based on the derived model and test data
+pred2 <- m2 %>% predict(test)
+
+# Computing R^2, RMSE, and MAE based on test data
+data.frame(R2 = R2(pred2, test$COMMIT),
+            RMSE = RMSE(pred2, test$COMMIT),
+            MAE = MAE(pred2, test$COMMIT))
+```
+
+### Question 3 (b)
+
+In order to calculate accuracy for the 2 models, we first convert their 
+numerical prediction results into a categorical format based on 
+the **COMMIT** median. Then we calculate their accuracy numbers 
+using a confusion matrix.
+```{r}
+# Convert numerical prediction to categorical
+pred1_cat <- pred1
+pred1_cat[pred1 < median(handout$COMMIT)] <- 0
+pred1_cat[pred1 >= median(handout$COMMIT)] <- 1
+pred1_cat <- as.factor(pred1_cat)
+
+# Create confusion matrix to assess model fit/performance on test data
+confusionMatrix(data = pred1_cat, test$COMMIT_cat)
+```
+
+```{r}
+# Convert numerical prediction to categorical
+pred2_cat <- pred2
+pred2_cat[pred2 < median(handout$COMMIT)] <- 0
+pred2_cat[pred2 >= median(handout$COMMIT)] <- 1
+pred2_cat <- as.factor(pred2_cat)
+
+# Create confusion matrix to assess model fit/performance on test data
+confusionMatrix(data = pred2_cat, test$COMMIT_cat)
+```
+
+### Question 3 (c)
+
+The 5-fold verified model has a higher accuracy number and a lower 
+p-value number, so it's a better model compared to the train/test model. Also, 
+both models have p-values less than 0.05 so both are statistically significant.
+
+
+# References
+
+Student Survey Dataset Guide\
+(https://vincentarelbundock.github.io/Rdatasets/articles/data.html)
+
+Student Survey Dataset CSV\
+(https://vincentarelbundock.github.io/Rdatasets/csv/MASS/survey.csv)
