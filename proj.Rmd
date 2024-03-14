@@ -23,7 +23,20 @@ data <- read.csv("Handout 1.csv")
 handout <- data %>% select(COMMIT, CLIMATE, CLASSSIZE, RESOURCES, AUTONOMY)
 ```
 
-Now we create a 80%-20% train-test data partition.
+Then, we create a categorical version of the target variable based on its median.
+```{r}
+# Create categorical outcome variable based on COMMIT median
+handout$COMMIT_cat[handout$COMMIT < median(handout$COMMIT)] <- 0
+handout$COMMIT_cat[handout$COMMIT >= median(handout$COMMIT)] <- 1
+
+# Convert outcome variable to factor format
+handout$COMMIT_cat <- as.factor(handout$COMMIT_cat)
+```
+
+
+**a)** Now, we create 2 linear regression models. One with partitioning the dataset into train/test groups, and one with 5-fold cross validation.
+
+**Train/Test Partitioning:** For the first model, we create a 80%-20% train-test data partition. We have also tried creating other models with 70%-30% and 60%-40% ratios and the results are pretty similar.
 ```{r}
 # Creating the train/test data partition
 idx <- handout$COMMIT %>%
@@ -31,19 +44,14 @@ idx <- handout$COMMIT %>%
 
 train <- handout[idx, ]
 test <- handout[-idx, ]
-```
 
-**a)** For this section, we create a linear regression model with 5-fold cross validation based on the train data.
-```{r}
-# Create 5-fold cross validation ctrl with 3 times repetition
-ctrl1 <- trainControl(method = "repeatedcv", number = 5)
-
-# Creating the linear model
-m1 <- train(COMMIT ~ ., data = train, method = "lm", trControl = ctrl1)
+# Creating the train/test model
+m1 <- train(COMMIT ~ CLIMATE + CLASSSIZE + RESOURCES + AUTONOMY,
+          data = train, method = "lm")
 summary(m1)
 ```
 
-The $R^2$, RMSE, and MAE of the model itself can be seen below.
+The $R^2$, RMSE, and MAE of the train/test model itself can be seen below.
 ```{r}
 # Outputting model's R^2, RMSE, and MAE
 print(m1)
@@ -60,42 +68,57 @@ data.frame(R2 = R2(pred1, test$COMMIT),
             MAE = MAE(pred1, test$COMMIT))
 ```
 
-**b)** For this section, first, we create a categorical version of the target variable based on its median.
+
+**5-fold Verification:** Now we create the second model based on the 5-fold verification method.
 ```{r}
-# Create categorical outcome variable based on COMMIT median
-train$COMMIT_cat[train$COMMIT < median(handout$COMMIT)] <- 0
-train$COMMIT_cat[train$COMMIT >= median(handout$COMMIT)] <- 1
+# Create 5-fold cross validation ctrl
+ctrl <- trainControl(method="cv", number=5)
 
-test$COMMIT_cat[test$COMMIT < median(handout$COMMIT)] <- 0
-test$COMMIT_cat[test$COMMIT >= median(handout$COMMIT)] <- 1
-
-# Convert outcome variable to factor for each data frame
-train$COMMIT_cat <- as.factor(train$COMMIT_cat)
-test$COMMIT_cat <- as.factor(test$COMMIT_cat)
-```
-
-Now, we create a linear logistic regression model with 5-fold cross validation based on the train data.
-```{r}
-ctrl2 <- trainControl(method="cv", number=5,
-                      savePredictions="all", classProbs=TRUE)
-
-# Creating the linear model
-m2 <- train(COMMIT_cat ~ CLIMATE + CLASSSIZE + RESOURCES + AUTONOMY,
-          data = train, method = "glm", family = "binomial")
+# Creating the 5-fold model
+m2 <- train(COMMIT ~ CLIMATE + CLASSSIZE + RESOURCES + AUTONOMY,
+          data = handout, trControl = ctrl, method = "lm")
 summary(m2)
 ```
 
-The accuracy of the model itself can be seen below.
+The $R^2$, RMSE, and MAE of the 5-fold model itself can be seen below.
 ```{r}
-# Outputting model's accuracy
+# Outputting model's R^2, RMSE, and MAE
 print(m2)
 ```
 
-Now, we calculate the predictions based on the test data and generate the confusion matrix to analyze its accuracy.
+Now, if we test this 5-fold model on the test data used for the first model, we can calculate the $R^2$, RMSE, and MAE based on these predictions.
 ```{r}
-# Creating predictions based on the model and test data
-pred2 <- predict(m2, newdata = test)
+# Creating predictions based on the derived model and test data
+pred2 <- m2 %>% predict(test)
+
+# Computing R^2, RMSE, and MAE based on test data
+data.frame(R2 = R2(pred2, test$COMMIT),
+            RMSE = RMSE(pred2, test$COMMIT),
+            MAE = MAE(pred2, test$COMMIT))
+```
+
+
+**b)** In order to calculate accuracy for the 2 models, we first convert their numerical prediction results into a categorical format based on the **COMMIT** median. Then we calculate their accuracy numbers using a confusion matrix.
+```{r}
+# Convert numerical prediction to categorical
+pred1_cat <- pred1
+pred1_cat[pred1 < median(handout$COMMIT)] <- 0
+pred1_cat[pred1 >= median(handout$COMMIT)] <- 1
+pred1_cat <- as.factor(pred1_cat)
 
 # Create confusion matrix to assess model fit/performance on test data
-confusionMatrix(data = pred2, test$COMMIT_cat)
+confusionMatrix(data = pred1_cat, test$COMMIT_cat)
 ```
+
+```{r}
+# Convert numerical prediction to categorical
+pred2_cat <- pred2
+pred2_cat[pred2 < median(handout$COMMIT)] <- 0
+pred2_cat[pred2 >= median(handout$COMMIT)] <- 1
+pred2_cat <- as.factor(pred2_cat)
+
+# Create confusion matrix to assess model fit/performance on test data
+confusionMatrix(data = pred2_cat, test$COMMIT_cat)
+```
+
+**c)** The 5-fold verified model has a higher accuracy number and a lower p-value number, so it's a better model compared to the train/test model. Also, both models have p-values less than 0.05 so both are statistically significant.
