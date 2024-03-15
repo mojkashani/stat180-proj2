@@ -183,14 +183,12 @@ or get dragged by them easily.
 
 ### c) Using any dataset of your choice, demonstrate K-means clustering with an example.
 The dataset that I am using is "survey.csv", with Age and Height being my dataframes. 
+
 ```{r}
-#Create the data frame, in this case Age and Height. 
 example <- data.frame(Age = c(survey$Age), 
-                      Height = c(survey$Height))
-#This removes any null inputs, which is needed to make the next plot. Important because it cannot take 
-example <- na.omit(example)  
-#Scale the data. 
-example <- scale(example) 
+                      Height = c(survey$Height))  #Create the data frame, in this case Age and Height. 
+example <- na.omit(example)  #This removes any null inputs, which is needed to make the next plot. 
+example <- scale(example)  #Scale the data. 
 #Elbow graph for most optimal number of clusters. 
 fviz_nbclust(example, kmeans, method = "wss")
 ```
@@ -199,12 +197,9 @@ much like an elbow, is the optimal number of clusters. It is very clear that the
 curved at 4, so four clusters is most likely the optimal amount.  
 
 ```{r}
-#This makes it reproducible.
-set.seed(1)
-#Creating a kmeans with 4 clusters. 
-Kmean <- kmeans(example, centers= 4) 
-#Graphing the kmeans!
-fviz_cluster(Kmean, data = example) 
+set.seed(1)  #This makes it reproducible.
+Kmean <- kmeans(example, centers= 4)  #Creating a kmeans with 4 clusters. 
+fviz_cluster(Kmean, data = example)  #Graphing the kmeans!
 ```
 As you can see, there are four clusters sorted from the data based on similarity. You can also see 
 the pull that outliers can have on data, as the blue is very elongated from the two outliers in 154 and 171. 
