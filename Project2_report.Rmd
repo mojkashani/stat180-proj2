@@ -216,6 +216,7 @@ First, we import the csv file and select **CLIMATE**, **CLASSSIZE**,
 
 ```{r}
 # Reading the csv data and filtering the relevant variables
+set.seed(123)
 data <- read.csv("Handout 1.csv")
 handout <- data %>% select(COMMIT, CLIMATE, CLASSSIZE, RESOURCES, AUTONOMY)
 ```
@@ -332,8 +333,7 @@ confusionMatrix(data = pred2_cat, test$COMMIT_cat)
 
 ### Question 3 (c)
 
-The 5-fold verified model has a higher accuracy number and a lower 
-p-value number, so it's a better model compared to the train/test model. Also, 
+Both the 5-fold verification model and the test/train model get the same prediction accuracy for the categorical commitment variable. Also, 
 both models have p-values less than 0.05 so both are statistically significant.
 
 # Summary
