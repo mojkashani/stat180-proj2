@@ -21,7 +21,7 @@ library(cluster)
 
 ```{r}
 # Read the data
-survey <- read.csv("/Users/sophiazhang/Desktop/stat project2/survey.csv")
+survey <- read.csv("survey.csv")
 ```
 
 ## Question 1:
@@ -216,7 +216,7 @@ First, we import the csv file and select **CLIMATE**, **CLASSSIZE**,
 
 ```{r}
 # Reading the csv data and filtering the relevant variables
-data <- read.csv("stat project2/Handout 1.csv")
+data <- read.csv("Handout 1.csv")
 handout <- data %>% select(COMMIT, CLIMATE, CLASSSIZE, RESOURCES, AUTONOMY)
 ```
 
