@@ -308,6 +308,24 @@ The 5-fold verified model has a higher accuracy number and a lower
 p-value number, so it's a better model compared to the train/test model. Also, 
 both models have p-values less than 0.05 so both are statistically significant.
 
+# Summary
+By successfully analyzed the data from project 1 and handout 1, specifically using
+one of the outcome variables which is called span of hand "Wr.Hnd", by using 
+multiple linear regression analysis and determine Model 1 is the best model with
+highest adjusted R-squared, while also considering RSE and p values. Later, 
+throughout the process of interpretation, by also finding out the height 
+variable is a significant predictor comparing other variables. We also noticed 
+our model might have potential limitations after doing residual analysis.
+Throughout this whole project, we have deeper understanding and more practice 
+experience with R visualization and regression analysis. In terms of regression 
+analysis, we gained skills of interpreting intercept and slopes by understanding
+the context of the problem. Comparing previous project, this time we are able to identify
+significant and determine better models in different ways. By also understanding 
+K-means and how to apply them into practice is also something significant we have 
+mastered. We also have clear and deeper understanding of relationship between
+independent variables and outcome variables. More importantly, we were able to
+cultivate skills of predicting errors using RMSE and apply the knowledge of Training 
+and Testing and 5-fold cross-validation we learned into real practice. 
 
 # References
 
