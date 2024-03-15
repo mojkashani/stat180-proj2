@@ -25,12 +25,12 @@ survey <- read.csv("/Users/sophiazhang/Desktop/stat project2/survey.csv")
 ## Question 1:
 
 Based on the project 1, one of the outcome variables is the 
-span of hand "Wr.Hnd".
+span of the writing hand "Wr.Hnd" in centimeters.
 
 #### Research Question:
 
-How does height, sex, and some other factors like as exercise frequency
-"Exer" and age affects the span of the writing hand "Wr. Hnd" among
+How does height and sex, and some other factors like as exercise frequency
+("Exer") and age, affects the span of the writing hand ("Wr. Hnd") among the surveyed
 students?
 
 ### Question 1 (a)
@@ -39,11 +39,11 @@ students?
 
 1.  Model 1: Wr.Hnd \~ Height + Sex
 
-2.  Model 2: Wr.Hnd \~ Height + Sex + Exer Add exercise frequency as an
-    ordinal variable
+2.  Model 2: Wr.Hnd \~ Height + Sex + Exer (Add exercise frequency as an
+    ordinal variable)
 
-3.  Model 3: Wr.Hnd \~ Height + Sex + Exer + Age Including age to
-    account for overall body size and growth
+3.  Model 3: Wr.Hnd \~ Height + Sex + Exer + Age (Including age to
+    account for overall body size and growth)
 
 ```{r}
 # Model 1: Model w/ height and sex
@@ -159,18 +159,24 @@ ggplot() +
 
 ### a) What is K-means clustering?
 
-This is the unsupervised machine learning algorithm where it divides objects
-into distinct clusters, with mean of points of each cluster, same clusters 
-having higher percentage of similarity, the different clusters have less.
+This is the unsupervised machine learning algorithm which it divides unlabelled or classified data 
+into distinct clusters. This sorts the data into clusters with patterns or show parallels and variation. 
+How it works is that the computer randomly creates cluster centroids or means. Then each object is categorized to it's 
+closest mean, which changes the centroid to be the average of the items inside of that cluster. This is repeated for 
+the given number of iterations, creating that many clusters of data. This algorithm continues until the data is divided
+into groups where data points in the same clusters have a higher percentage of similarity, while the different clusters 
+have less of it. 
 
 ### b) List three advantages and three disadvantages of K-means clustering?
 
 - Advantages: 
-simple and efficient to handle big datasets.
+1. It is very fast at clustering large amounts of data into groups
+2. You can generate clusters of various shapes 
+3. Will always have data convergence, which can more easily show trends inside of the information.
 - Disadvantages: 
-Have to know how to scale outliers since outliers are sensitive
-here. 
-You have to have knowledge about choosing number of clusters in advance.
+1. Have to know how to scale outliers since it can be very sensitive to outliers, since the centroids can gather or get dragged by them easily. 
+2. You have to make sure to choose the correct number of clusters in advance.
+3. It has trouble clustering data with different sizes or densitiies. 
 
 ### c) Using any dataset of your choice, demonstrate K-means clustering with an example.
 
