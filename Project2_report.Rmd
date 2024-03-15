@@ -176,7 +176,8 @@ have less of it.
 2. You can generate clusters of various shapes 
 3. Will always have data convergence, which can more easily show trends inside of the information.
 - Disadvantages: 
-1. Have to know how to scale outliers since it can be very sensitive to outliers, since the centroids can gather or get dragged by them easily. 
+1. Have to know how to scale outliers since it can be very sensitive to outliers, since the centroids can gather 
+or get dragged by them easily. 
 2. You have to make sure to choose the correct number of clusters in advance.
 3. It has trouble clustering data with different sizes or densitiies. 
 
@@ -193,7 +194,9 @@ example <- scale(example)
 #Elbow graph for most optimal number of clusters. 
 fviz_nbclust(example, kmeans, method = "wss")
 ```
-This chart is used in order to find the number of clusters needed to be found. Where the sum of the squares begin to bend, much like an elbow, is the optimal number of clusters. It is very clear that the graph line changes from linear to more curved at 4, so four clusters is most likely the optimal amount.  
+This chart is used in order to find the number of clusters needed to be found. Where the sum of the squares begin to bend,
+much like an elbow, is the optimal number of clusters. It is very clear that the graph line changes from linear to more 
+curved at 4, so four clusters is most likely the optimal amount.  
 
 ```{r}
 #This makes it reproducible.
@@ -203,7 +206,8 @@ Kmean <- kmeans(example, centers= 4)
 #Graphing the kmeans!
 fviz_cluster(Kmean, data = example) 
 ```
-As you can see, there are four clusters sorted from the data based on similarity. You can also see the pull that outliers can have on data, as the blue is very elongated from the two outliers in 154 and 171. 
+As you can see, there are four clusters sorted from the data based on similarity. You can also see 
+the pull that outliers can have on data, as the blue is very elongated from the two outliers in 154 and 171. 
 
 ## Question 3:
 
