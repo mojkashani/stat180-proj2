@@ -337,23 +337,19 @@ Both the 5-fold verification model and the test/train model get the same predict
 both models have p-values less than 0.05 so both are statistically significant.
 
 # Summary
-By successfully analyzed the data from project 1 and handout 1, specifically using
-one of the outcome variables which is called span of hand "Wr.Hnd", by using 
-multiple linear regression analysis and determine Model 1 is the best model with
-highest adjusted R-squared, while also considering RSE and p values. Later, 
-throughout the process of interpretation, by also finding out the height 
-variable is a significant predictor comparing other variables. We also noticed 
-our model might have potential limitations after doing residual analysis.
-Throughout this whole project, we have deeper understanding and more practice 
-experience with R visualization and regression analysis. In terms of regression 
-analysis, we gained skills of interpreting intercept and slopes by understanding
-the context of the problem. Comparing previous project, this time we are able to identify
-significant and determine better models in different ways. By also understanding 
-K-means and how to apply them into practice is also something significant we have 
-mastered. We also have clear and deeper understanding of relationship between
-independent variables and outcome variables. More importantly, we were able to
-cultivate skills of predicting errors using RMSE and apply the knowledge of Training 
-and Testing and 5-fold cross-validation we learned into real practice. 
+By successfully analyzing the data from project 1, specifically using the outcome variable "Wr.Hnd", and the data in handout 1, we determined with linear regression analysis Model 1 is the best model. We did this by looking at the RSE 
+and p values, and considering it has the highest adjusted R-squared, it was the best model for the data. 
+Later, throughout the process of interpretation found that the variable Height is a significant predictor 
+of other variables. After doing some residual analysis, we also noticed our model might have 
+potential limitations. Throughout this whole project, we have gained a deeper understanding 
+and more practical experience with R visualization and regression analysis. In terms of regression 
+analysis, we gained a better understanding of interpreting intercept and slopes from the context 
+of the problem. Comparing previous project, this time we are able to identify and determine 
+significant models in different ways. It is also significant that we mastered K-means and how 
+to apply them into practice. We now also have clear and deeper understanding of relationship between
+independent variables and outcome variables. Most importantly, we were able to cultivate skills of 
+predicting errors using RMSE, plus applying Training and Testing and 5-fold cross-validation by applying 
+it to real world data sets.
 
 # References
 
