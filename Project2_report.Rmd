@@ -15,6 +15,8 @@ library(dplyr)
 library(hrbrthemes)
 library(geomtextpath)
 library(caret)
+library(factoextra)
+library(cluster)
 ```
 
 ```{r}
@@ -179,7 +181,29 @@ have less of it.
 3. It has trouble clustering data with different sizes or densitiies. 
 
 ### c) Using any dataset of your choice, demonstrate K-means clustering with an example.
+The dataset that I am using is "survey.csv", with Age and Height being my dataframes. 
+```{r}
+#Create the data frame, in this case Age and Height. 
+example <- data.frame(Age = c(survey$Age), 
+                      Height = c(survey$Height))
+#This removes any null inputs, which is needed to make the next plot. Important because it cannot take 
+example <- na.omit(example)  
+#Scale the data. 
+example <- scale(example) 
+#Elbow graph for most optimal number of clusters. 
+fviz_nbclust(example, kmeans, method = "wss")
+```
+This chart is used in order to find the number of clusters needed to be found. Where the sum of the squares begin to bend, much like an elbow, is the optimal number of clusters. It is very clear that the graph line changes from linear to more curved at 4, so four clusters is most likely the optimal amount.  
 
+```{r}
+#This makes it reproducible.
+set.seed(1)
+#Creating a kmeans with 4 clusters. 
+Kmean <- kmeans(example, centers= 4) 
+#Graphing the kmeans!
+fviz_cluster(Kmean, data = example) 
+```
+As you can see, there are four clusters sorted from the data based on similarity. You can also see the pull that outliers can have on data, as the blue is very elongated from the two outliers in 154 and 171. 
 
 ## Question 3:
 
